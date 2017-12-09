@@ -1,0 +1,13 @@
+version: '3'
+
+volumes:
+  data:
+
+services:
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.0.1
+    container_name: kibana
+    environment:
+      ELASTICSEARCH_URL: http://asuka.prokosna.internal:9200
+    ports:
+      - 5601:5601

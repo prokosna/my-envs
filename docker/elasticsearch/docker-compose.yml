@@ -11,8 +11,10 @@ services:
     environment:
       - cluster.name=prokosna-es
       - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - discovery.zen.minimum_master_nodes=2
+      - discovery.zen.ping.unicast.hosts=ranko.prokosna.internal,asuka.prokosna.internal
       - "ES_JAVA_OPTS=-Xms10g -Xmx10g"
-      - "discovery.zen.ping.unicast.hosts=['ranko.prokosna.internal','asuka.prokosna.internal']"
     ulimits:
       memlock:
         soft: -1
