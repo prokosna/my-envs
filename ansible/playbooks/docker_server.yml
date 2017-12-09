@@ -1,0 +1,5 @@
+- name: Install docker-ce and docker-compose
+  hosts: docker_server
+  roles:
+    - base_server
+    - docker_server

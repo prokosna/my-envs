@@ -1,0 +1,11 @@
+- name: Check sysctl.conf for vm.max_map_count
+  shell: grep "^vm.max_map_count=262144" /etc/sysctl.conf
+  register: max_map_count_exists
+  ignore_errors: True
+
+- name: Add vm.max_map_count if not exists
+  lineinfile:
+    dest: /etc/sysctl.conf
+    line: "vm.max_map_count=262144"
+  when: max_map_count_exists != ""
+  become: true

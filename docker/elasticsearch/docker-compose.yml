@@ -1,0 +1,28 @@
+version: '3'
+
+volumes:
+  snapshot:
+  data:
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+    contianer_name: elasticsearch
+    environment:
+      - cluster.name=prokosna-es
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms10g -Xmx10g"
+      - "discovery.zen.ping.unicast.hosts=['ranko.prokosna.internal','asuka.prokosna.internal']"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - data:/usr/share/elasticsearch/data
+      - snapshot:/usr/share/elasticsearch/snapshot
+    ports:
+      - 9200:9200
+      - 9300:9300

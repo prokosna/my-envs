@@ -1,0 +1,4 @@
+- name: Configurate for Elasticsearch
+  hosts: elasticsearch_server
+  roles:
+    - elasticsearch_server

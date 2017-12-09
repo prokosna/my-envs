@@ -1,0 +1,4 @@
+- name: Debug
+  hosts: docker_server
+  roles:
+    - debug

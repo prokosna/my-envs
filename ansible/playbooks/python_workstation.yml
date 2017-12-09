@@ -1,0 +1,4 @@
+- name: Python development workstation
+  hosts: desktop
+  roles:
+    - pyenv_virtualenv

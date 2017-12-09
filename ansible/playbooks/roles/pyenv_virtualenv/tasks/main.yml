@@ -1,0 +1,12 @@
+- name: Install pyenv via pyenv-installer
+  shell: curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+
+- name: Make sure that fish/conf.d exists
+  file:
+    path: ~/.config/fish/conf.d
+    state: directory
+
+- name: Add pyenv.fish to fish/conf.d
+  copy:
+    src: pyenv.fish
+    dest: ~/.config/fish/conf.d/

@@ -1,0 +1,18 @@
+- name: Update packages
+  apt:
+    upgrade: dist
+    update_cache: yes
+  become: true
+
+- name: Install basic packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - git
+    - vim
+    - curl
+    - wget
+    - net-tools
+  become: true
