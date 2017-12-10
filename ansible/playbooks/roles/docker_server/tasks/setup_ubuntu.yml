@@ -1,0 +1,65 @@
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - linux-image-extra-virtual
+    - linux-image-extra-{{ ansible_kernel }}
+    - software-properties-common
+  become: true
+
+- name: Check docker GPG key
+  shell: apt-key fingerprint 0EBFCD88 | grep 0EBFCD88
+  register: docker_gpg
+  ignore_errors: True
+  changed_when: False
+  become: true
+
+- name: Add Docker’s official GPG key
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  when: docker_gpg | failed
+  become: true
+
+- name: Define lsb_release -cs
+  shell: lsb_release -cs
+  ignore_errors: True
+  register: lsb_release
+
+- name: Set up the stable repository
+  shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable"
+  become: true
+
+- name: Install docker-ce
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Add the user to the docker group
+  user:
+    name: "{{ ansible_ssh_user }}"
+    groups: docker
+    append: yes
+  become: true
+
+- name: Enable and run docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: restarted
+  become: true
+
+- name: Download docker-compose
+  shell: curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+  become: true
+
+- name: Add x to docker-compose
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: 0755
+  become: true
